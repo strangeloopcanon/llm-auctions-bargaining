@@ -1,0 +1,16 @@
+[project]
+name = "coase-llm"
+version = "0.1.0"
+description = "Multi-agent Vickrey and Shapley experiments with GPT-5.1 via OpenAI responses API."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.30.0",
+    "google-genai>=0.2.0",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.setuptools]
+packages = ["experiments"]
