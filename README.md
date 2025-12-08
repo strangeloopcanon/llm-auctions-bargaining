@@ -50,6 +50,6 @@ For all experiments (including internal markets and IP licensing), see `RUNS_OVE
 - Shapley: compare distance to the reference split with/without DMs and reference reveal; inspect coalition messages and whether agreements converge when the reference is withheld. Adversarial runs test whether a single actor derails convergence.
 
 ## Initial findings (early runs)
-- Summaries and transcripts live in `runs/`. `RUNS_OVERVIEW.md` is the canonical log of all runs; `REPORT.md` is an archived snapshot of the earliest Vickrey/Shapley results.
+- Representative summaries and transcripts live in `runs/`. `RUNS_OVERVIEW.md` is the canonical log of all runs and results.
 - Vickrey (early seeds 42–44): allocative efficiency held; side-channel messages reinforced truthful bidding; no rule challenges; overbids were only rounding effects; memory arm showed no drift.
 - Shapley (early seeds 42–44): private DMs enabled coalition talk (e.g., p4/p5 coordinating premiums) and nudged allocations toward the reference, but most outcomes stayed materially off the Shapley-style split; broadcast-only often fell back to near-equal splits; no deadlocks or rule attacks observed.

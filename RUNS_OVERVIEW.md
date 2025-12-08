@@ -11,16 +11,16 @@ This collects what we have run so far, the prompt scaffolding, and key takeaways
 ## Runs completed (OpenAI gpt-5.1 unless noted)
 
 ### Internal capital market (Coase/Hayek inside the firm)
-- Seeds: 800, 801, 802; 10 quarters, 20 features. Outputs: `runs_internal_market/firm_market_seed{seed}_events.jsonl` (+ summaries).
+- Seeds: 800, 801, 802; 10 quarters, 20 features. Outputs: `runs_internal_market/firm_market_seed{seed}_events.jsonl` (+ summaries) for the baseline regime.
 - Observations:
   - GTM departments (Marketing, Sales) accumulate political capital; Engineering posts negative utility most quarters. Internal “prices” tilt toward demo/narrative features.
   - Allocator (points per eng-cost) plus soft budget updates do not protect platform health; reliability/infra loses unless hard floors or stronger clawbacks are added.
-  - Updates (950–952 run): features carry risk flags; Engineering can veto risky items; platform-risk penalties and outage shocks applied (p_outage = 0.02 + 0.05×risky; outage cost shared); planner knapsack baseline logged. Outages triggered; veto/penalties reduced risky selections but Engineering utility stayed low.
+  - Updates (seed 950): features carry risk flags; Engineering can veto risky items; platform-risk penalties and outage shocks applied (p_outage = 0.02 + 0.05×risky; outage cost shared); planner knapsack baseline logged. Outages triggered; veto/penalties reduced risky selections but Engineering utility stayed low.
   - Additional notes: Outages visibly penalized everyone when risky items slipped through, tempering GTM bids on risky items. Engineering influence improved only marginally; stronger budget responsiveness or explicit safety floors may be needed to rebalance.
   - Implication: Lowered coordination cost via LLMs does not ensure Coasean efficiency; without constraints, internal markets over-provide flashy work and under-provide risk reduction.
 
 ### IP licensing market (cross-firm tech market)
-- Seeds: 900, 901, 902 (20 firms, 30 modules); 930–931 (12 firms, 24 modules with trade incentives/reputation/profit feedback, but no trade); 940–942 (12 firms, 24 modules with profit→budget + mandatory ask/bid + price hints → trades appear). Outputs: `runs_ip_market/ip_market_seed9{00-02,30,31,40-42}.jsonl`.
+- Seeds: 900, 901, 902 (20 firms, 30 modules); 930–931 (12 firms, 24 modules with trade incentives/reputation/profit feedback, but no trade); 940–942 (12 firms, 24 modules with profit→budget + mandatory ask/bid + price hints → trades appear). Representative logs are included for seeds 900, 930, 940, and 980 in `runs_ip_market/`.
 - Protocol (900–902): one-shot double auction per module; firms asked for build plans, license asks/bids; matcher clears best bid/ask.
 - Updated protocol (930–931): 2 rounds, reputation, post-trade verification/failure risk, idle penalties, trade bonuses, counterparty hints, short history feedback in prompts. Still zero deals.
 - Updated protocol (940–942): same as above plus profit → next-round budget, mandatory ask/bid fallback, and price hints. Deals finally appeared (e.g., seed 940: 3 deals per round; welfare ≈ 141 vs ~125 with no trade).
@@ -42,8 +42,8 @@ This collects what we have run so far, the prompt scaffolding, and key takeaways
 - Implication: Without incentives or enforcement, agents smooth surplus; Coasean/bargaining efficiency does not emerge automatically.
 
 ### Earlier runs (for context)
-- Vickrey seeds 42–44 and Shapley seeds 42–44 are in `runs/` with the same schemas; patterns match the newer runs (truthful Vickrey, fairness-biased Shapley).
-- Zoning experiment scaffolding exists but was not executed in this batch (`runs_zoning/` is empty).
+- Earlier Vickrey and Shapley runs with seeds 42–44 used the same schemas; patterns matched the newer runs (truthful Vickrey, fairness-biased Shapley). To keep the repo light, only representative logs (e.g., seed 910) are checked in under `runs/`.
+- Zoning experiment scaffolding exists and a single pilot run (`runs_zoning/zoning_seed300.jsonl`) is included as an example but not analyzed here.
 
 ## Cross-experiment implications
 - Internal markets drift toward GTM narratives; Engineering loses unless protected. Coasean inside-firm bargains are not self-enforcing.

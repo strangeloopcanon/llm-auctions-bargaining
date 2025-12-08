@@ -23,8 +23,8 @@ dist/
 
 # Local env and runs
 .env
+.venv_plots/
 runs/
 runs_internal_market/
 runs_ip_market/
 runs_zoning/
-
