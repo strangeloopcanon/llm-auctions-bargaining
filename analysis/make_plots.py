@@ -164,7 +164,7 @@ def plot_shapley_l1_by_condition() -> None:
     plt.close()
 
 
-def plot_ip_completion_launch_rate_by_arm_and_model() -> None:
+def plot_ip_completion_fulfillment_rate_by_arm_and_model() -> None:
     path = Path("runs_ip_completion_market/ip_completion_market_results.jsonl")
     if not path.exists():
         return
@@ -181,7 +181,7 @@ def plot_ip_completion_launch_rate_by_arm_and_model() -> None:
     for row in rows:
         summary = row.get("summary", {})
         grouped[(row.get("model", ""), row.get("arm", ""))].append(
-            float(summary.get("launch_rate", 0.0))
+            float(summary.get("fulfillment_rate", 0.0))
         )
 
     labels = []
@@ -192,11 +192,11 @@ def plot_ip_completion_launch_rate_by_arm_and_model() -> None:
 
     plt.figure(figsize=(7, 4))
     plt.bar(labels, values)
-    plt.ylabel("Launch rate")
+    plt.ylabel("Fulfillment rate")
     plt.ylim(0, 1)
-    plt.title("IP completion market launch rate by arm and model")
+    plt.title("IP completion market fulfillment rate by arm and model")
     plt.tight_layout()
-    plt.savefig(PLOTS_DIR / "ip_completion_launch_rate_by_arm_and_model.png", dpi=200)
+    plt.savefig(PLOTS_DIR / "ip_completion_fulfillment_rate_by_arm_and_model.png", dpi=200)
     plt.close()
 
 
@@ -204,7 +204,7 @@ def main() -> None:
     ensure_dir()
     plot_ip_welfare_by_regime()
     plot_ip_adversarial_profit_seed980()
-    plot_ip_completion_launch_rate_by_arm_and_model()
+    plot_ip_completion_fulfillment_rate_by_arm_and_model()
     plot_internal_budgets_seed950()
     plot_shapley_l1_by_condition()
 

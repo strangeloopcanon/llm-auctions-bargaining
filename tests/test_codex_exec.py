@@ -50,8 +50,8 @@ def test_parse_codex_usage_from_jsonl_collects_turn_usage() -> None:
 
 
 def test_parse_last_message_json_requires_object() -> None:
-    data = parse_last_message_json('{"launch_products":["P1"]}')
-    assert data == {"launch_products": ["P1"]}
+    data = parse_last_message_json('{"fulfill_orders":["O1"]}')
+    assert data == {"fulfill_orders": ["O1"]}
 
 
 def test_build_output_schema_handles_nested_arrays_and_objects() -> None:

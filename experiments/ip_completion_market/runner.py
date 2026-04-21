@@ -7,17 +7,18 @@ from typing import List
 
 from ..protocols import write_jsonl
 from ..settings import ModelSettings
-from .generator import generate_firms, generate_modules_and_products
+from .generator import generate_firms, generate_modules_and_orders
 from .market import run_completion_market
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the completion-focused IP market experiment.")
+    parser = argparse.ArgumentParser(description="Run the customer-order IP initiative experiment.")
     parser.add_argument("--seeds", type=int, default=2)
     parser.add_argument("--base-seed", type=int, default=500)
     parser.add_argument("--firms", type=int, default=6)
     parser.add_argument("--modules", type=int, default=12)
-    parser.add_argument("--products", type=int, default=6)
+    parser.add_argument("--orders", type=int, default=6)
+    parser.add_argument("--products", type=int, dest="orders", help=argparse.SUPPRESS)
     parser.add_argument("--rounds", type=int, default=2)
     parser.add_argument(
         "--provider",
@@ -67,10 +68,10 @@ def main() -> None:
         ]
     for offset in range(args.seeds):
         seed = args.base_seed + offset
-        modules, products = generate_modules_and_products(
+        modules, orders = generate_modules_and_orders(
             n_firms=args.firms,
             n_modules=args.modules,
-            n_products=args.products,
+            n_orders=args.orders,
             seed=seed,
         )
         for model in models:
@@ -88,7 +89,7 @@ def main() -> None:
                     model_settings=model_settings,
                     firms=firms,
                     modules=modules,
-                    products=products,
+                    orders=orders,
                     dry_run=args.dry_run,
                     rounds=args.rounds,
                     seed=seed,
@@ -100,7 +101,7 @@ def main() -> None:
                     "model": model,
                     "summary": result["summary"],
                     "round_logs": result["round_logs"],
-                    "products": result["products"],
+                    "orders": result["orders"],
                     "modules": result["modules"],
                 }
                 rows.append(row)

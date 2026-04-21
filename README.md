@@ -36,7 +36,7 @@ For all experiments (including internal markets and IP licensing), see `RUNS_OVE
 
 IP completion market smoke run with Codex (`gpt-5.4`, 1 seed, both prompt arms):
 ```
-python -m experiments.ip_completion_market.runner --provider codex --models gpt-5.4 --seeds 1 --firms 4 --modules 4 --products 2 --rounds 1 --codex-timeout 300
+python -m experiments.ip_completion_market.runner --provider codex --models gpt-5.4 --seeds 1 --firms 4 --modules 4 --orders 2 --rounds 1 --codex-timeout 300
 ```
 
 IP completion market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
@@ -44,7 +44,7 @@ IP completion market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt
 python -m experiments.ip_completion_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --codex-timeout 300
 ```
 
-Outputs for the completion experiment land in `runs_ip_completion_market/ip_completion_market_results.jsonl`.
+Outputs for the customer-order initiative experiment land in `runs_ip_completion_market/ip_completion_market_results.jsonl`.
 
 ## Conditions (prioritized for institutional robustness)
 - Vickrey: `collusion_channel` (one public message before bids), `memory_anchor` (3 repeated auctions with price history), `rule_challenge` (bidders can contest rules, explanations required), `explanation_coord` (messages + required rationale).

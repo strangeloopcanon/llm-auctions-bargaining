@@ -1,5 +1,5 @@
 """
-Summarize the completion-focused IP market runs into a compact Markdown table.
+Summarize the customer-order IP initiative runs into a compact Markdown table.
 
 Usage (from repo root):
     python -m analysis.summarize_ip_completion_market
@@ -49,18 +49,23 @@ def aggregate(rows: List[Dict[str, Any]]) -> List[Tuple[str, str, Dict[str, floa
         summaries = [item.get("summary", {}) for item in items]
         metrics = {
             "runs": float(len(items)),
-            "launch_rate": mean(summary.get("launch_rate", 0.0) for summary in summaries),
-            "partial_bundle_rate": mean(
-                summary.get("partial_bundle_rate", 0.0) for summary in summaries
+            "fulfillment_rate": mean(summary.get("fulfillment_rate", 0.0) for summary in summaries),
+            "started_not_delivered_count": mean(
+                summary.get("started_not_delivered_count", 0.0) for summary in summaries
             ),
-            "started_not_finished_count": mean(
-                summary.get("started_not_finished_count", 0.0) for summary in summaries
+            "self_initiated_trade_rate": mean(
+                summary.get("self_initiated_trade_rate", 0.0) for summary in summaries
             ),
             "deal_volume": mean(summary.get("deal_volume", 0.0) for summary in summaries),
-            "internal_builds": mean(summary.get("internal_builds", 0.0) for summary in summaries),
+            "substitute_builds_started": mean(
+                summary.get("substitute_builds_started", 0.0) for summary in summaries
+            ),
+            "substitute_builds_completed": mean(
+                summary.get("substitute_builds_completed", 0.0) for summary in summaries
+            ),
             "welfare": mean(summary.get("welfare", 0.0) for summary in summaries),
-            "launch_bonus_captured": mean(
-                summary.get("launch_bonus_captured", 0.0) for summary in summaries
+            "customer_value_captured": mean(
+                summary.get("customer_value_captured", 0.0) for summary in summaries
             ),
         }
         results.append((model, arm, metrics))
@@ -68,15 +73,23 @@ def aggregate(rows: List[Dict[str, Any]]) -> List[Tuple[str, str, Dict[str, floa
 
 
 def print_markdown_table(aggregates: List[Tuple[str, str, Dict[str, float]]]) -> None:
-    print("| model | arm | runs | launch_rate | partial_bundle_rate | started_not_finished | deal_volume | internal_builds | welfare | launch_bonus_captured |")
-    print("| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+    print(
+        "| model | arm | runs | fulfillment_rate | started_not_delivered | "
+        "self_initiated_trade_rate | deal_volume | substitute_builds_started | "
+        "substitute_builds_completed | welfare | customer_value_captured |"
+    )
+    print(
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"
+    )
     for model, arm, metrics in aggregates:
         print(
             "| "
-            f"{model} | {arm} | {int(metrics['runs'])} | {metrics['launch_rate']:.3f} | "
-            f"{metrics['partial_bundle_rate']:.3f} | {metrics['started_not_finished_count']:.2f} | "
-            f"{metrics['deal_volume']:.2f} | {metrics['internal_builds']:.2f} | "
-            f"{metrics['welfare']:.2f} | {metrics['launch_bonus_captured']:.2f} |"
+            f"{model} | {arm} | {int(metrics['runs'])} | {metrics['fulfillment_rate']:.3f} | "
+            f"{metrics['started_not_delivered_count']:.2f} | "
+            f"{metrics['self_initiated_trade_rate']:.3f} | "
+            f"{metrics['deal_volume']:.2f} | {metrics['substitute_builds_started']:.2f} | "
+            f"{metrics['substitute_builds_completed']:.2f} | {metrics['welfare']:.2f} | "
+            f"{metrics['customer_value_captured']:.2f} |"
         )
 
 
