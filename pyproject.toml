@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "coase-llm"
 version = "0.1.0"
@@ -12,5 +16,5 @@ dependencies = [
 [tool.ruff]
 line-length = 100
 
-[tool.setuptools]
-packages = ["experiments"]
+[tool.setuptools.packages.find]
+include = ["experiments*"]

@@ -152,7 +152,6 @@ def compute_profits(
     """
     profits: Dict[str, float] = {}
     deal_price: Dict[str, float] = {t: p for t, s, b, p in deals}
-    deal_seller: Dict[str, str] = {t: s for t, s, b, p in deals}
     for m in modules:
         for u in use.get(m.tech_id, []):
             if u == m.owner:
@@ -181,9 +180,39 @@ def run_market(
     schema = {
         "type": "OBJECT",
         "properties": {
-            "build_decisions": {"type": "ARRAY"},
-            "license_sells": {"type": "ARRAY"},
-            "license_buys": {"type": "ARRAY"},
+            "build_decisions": {
+                "type": "ARRAY",
+                "items": {
+                    "type": "OBJECT",
+                    "properties": {
+                        "tech_id": {"type": "STRING"},
+                        "decision": {"type": "STRING"},
+                    },
+                    "required": ["tech_id", "decision"],
+                },
+            },
+            "license_sells": {
+                "type": "ARRAY",
+                "items": {
+                    "type": "OBJECT",
+                    "properties": {
+                        "tech_id": {"type": "STRING"},
+                        "min_price": {"type": "NUMBER"},
+                    },
+                    "required": ["tech_id", "min_price"],
+                },
+            },
+            "license_buys": {
+                "type": "ARRAY",
+                "items": {
+                    "type": "OBJECT",
+                    "properties": {
+                        "tech_id": {"type": "STRING"},
+                        "max_price": {"type": "NUMBER"},
+                    },
+                    "required": ["tech_id", "max_price"],
+                },
+            },
             "commentary": {"type": "STRING"},
         },
     }

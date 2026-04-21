@@ -56,7 +56,7 @@ def summarize_vickrey_shapley():
     print("\n== VICKREY / SHAPLEY SUMMARIES ==")
     for p in sorted(base.glob("*_summary.jsonl")):
         try:
-            data = json.loads(p.read_text())
+            json.loads(p.read_text())
         except Exception:
             continue
         if p.name.startswith("vickrey"):
@@ -76,4 +76,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

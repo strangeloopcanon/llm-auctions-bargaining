@@ -27,4 +27,10 @@ dist/
 runs/
 runs_internal_market/
 runs_ip_market/
+runs_ip_completion_market/
 runs_zoning/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
