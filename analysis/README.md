@@ -4,6 +4,7 @@ Analysis helpers
 This folder is for lightweight scripts and notebooks to summarize runs and prepare visuals.
 
 Suggested plots (see RUNS_OVERVIEW.md for context):
+- Standards market: module completion, format convergence, and delivery rates by prompt arm.
 - Certification-slot market: fulfillment and booking-rule activation rates by prompt arm and model.
 - Escrow market: fulfillment and institution-activation rates by prompt arm and model.
 - IP brokered market: fulfillment and board-use rates by prompt arm and model.
