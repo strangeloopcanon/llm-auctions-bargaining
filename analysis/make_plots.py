@@ -34,6 +34,14 @@ def _completion_label(scenario: str, model: str, arm: str) -> str:
     return f"{scenario_label}\n{model}\n{arm_label}"
 
 
+def _brokered_label(model: str, arm: str) -> str:
+    arm_label = {
+        "baseline": "baseline",
+        "completion_explicit": "explicit",
+    }.get(arm, arm)
+    return f"{model}\n{arm_label}"
+
+
 def plot_ip_welfare_by_regime() -> None:
     base = Path("runs_ip_market")
     if not base.exists():
@@ -189,6 +197,32 @@ def _load_ip_completion_rows() -> list[dict]:
     return rows
 
 
+def _load_ip_brokered_rows() -> list[dict]:
+    path = Path("runs_ip_brokered_market/ip_brokered_market_results.jsonl")
+    if not path.exists():
+        return []
+
+    rows = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if not raw_line.strip():
+            continue
+        rows.append(json.loads(raw_line))
+    return rows
+
+
+def _load_escrow_rows() -> list[dict]:
+    path = Path("runs_escrow_market/escrow_market_results.jsonl")
+    if not path.exists():
+        return []
+
+    rows = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if not raw_line.strip():
+            continue
+        rows.append(json.loads(raw_line))
+    return rows
+
+
 def plot_ip_completion_fulfillment_rate_by_scenario_arm_and_model() -> None:
     rows = _load_ip_completion_rows()
     if not rows:
@@ -247,10 +281,130 @@ def plot_ip_completion_partner_request_rate_by_scenario_arm_and_model() -> None:
     plt.close()
 
 
+def plot_ip_brokered_fulfillment_rate_by_arm_and_model() -> None:
+    rows = _load_ip_brokered_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("fulfillment_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (model, arm), samples in sorted(grouped.items()):
+        labels.append(_brokered_label(model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Fulfillment rate")
+    plt.ylim(0, 1)
+    plt.title("Brokered IP market fulfillment rate by arm and model")
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "ip_brokered_fulfillment_rate_by_arm_model.png", dpi=200)
+    plt.close()
+
+
+def plot_ip_brokered_board_use_rate_by_arm_and_model() -> None:
+    rows = _load_ip_brokered_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("board_use_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (model, arm), samples in sorted(grouped.items()):
+        labels.append(_brokered_label(model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Board-use rate")
+    plt.ylim(0, 1)
+    plt.title("Brokered IP market board-use rate by arm and model")
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "ip_brokered_board_use_rate_by_arm_model.png", dpi=200)
+    plt.close()
+
+
+def plot_escrow_fulfillment_rate_by_arm_and_model() -> None:
+    rows = _load_escrow_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("fulfillment_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (model, arm), samples in sorted(grouped.items()):
+        labels.append(_brokered_label(model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Fulfillment rate")
+    plt.ylim(0, 1)
+    plt.title("Escrow market fulfillment rate by arm and model")
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "escrow_market_fulfillment_rate_by_arm_model.png", dpi=200)
+    plt.close()
+
+
+def plot_escrow_institution_activation_rate_by_arm_and_model() -> None:
+    rows = _load_escrow_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("institution_activation_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (model, arm), samples in sorted(grouped.items()):
+        labels.append(_brokered_label(model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Institution activation rate")
+    plt.ylim(0, 1)
+    plt.title("Escrow market institution activation rate by arm and model")
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "escrow_market_institution_activation_rate_by_arm_model.png", dpi=200)
+    plt.close()
+
+
 def main() -> None:
     ensure_dir()
+    plot_escrow_fulfillment_rate_by_arm_and_model()
+    plot_escrow_institution_activation_rate_by_arm_and_model()
     plot_ip_welfare_by_regime()
     plot_ip_adversarial_profit_seed980()
+    plot_ip_brokered_fulfillment_rate_by_arm_and_model()
+    plot_ip_brokered_board_use_rate_by_arm_and_model()
     plot_ip_completion_fulfillment_rate_by_scenario_arm_and_model()
     plot_ip_completion_partner_request_rate_by_scenario_arm_and_model()
     plot_internal_budgets_seed950()

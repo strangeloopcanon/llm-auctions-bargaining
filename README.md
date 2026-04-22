@@ -46,6 +46,30 @@ python -m experiments.ip_completion_market.runner --provider codex --models gpt-
 
 Outputs for the customer-order initiative experiment land in `runs_ip_completion_market/ip_completion_market_results.jsonl` and include the information-regime `scenario` for each run.
 
+Brokered IP market smoke run with Codex (`gpt-5.4` and `gpt-5.2`, 1 seed, both prompt arms):
+```
+python -m experiments.ip_brokered_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 4 --modules 4 --orders 2 --rounds 3 --codex-timeout 600
+```
+
+Brokered IP market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
+```
+python -m experiments.ip_brokered_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --rounds 3 --codex-timeout 600
+```
+
+Outputs for the brokered board benchmark land in `runs_ip_brokered_market/ip_brokered_market_results.jsonl`.
+
+Escrow market smoke run with Codex (`gpt-5.4` and `gpt-5.2`, 1 seed, both prompt arms):
+```
+python -m experiments.escrow_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 6 --rounds 3 --codex-timeout 600
+```
+
+Escrow market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
+```
+python -m experiments.escrow_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --rounds 3 --codex-timeout 600
+```
+
+Outputs for the escrow benchmark land in `runs_escrow_market/escrow_market_results.jsonl`.
+
 ## Conditions (prioritized for institutional robustness)
 - Vickrey: `collusion_channel` (one public message before bids), `memory_anchor` (3 repeated auctions with price history), `rule_challenge` (bidders can contest rules, explanations required), `explanation_coord` (messages + required rationale).
 - Shapley: `dm_late_reveal` (private DMs allowed; mediator reveals reference split after round 1), `broadcast_never_reveal` (broadcast-only; no reference), `dm_never_reveal_adversarial` (private DMs; one contrarian player; no reference).
