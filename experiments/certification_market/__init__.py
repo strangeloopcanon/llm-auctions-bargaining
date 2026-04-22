@@ -1,0 +1,1 @@
+"""Certification-slot initiative benchmark."""

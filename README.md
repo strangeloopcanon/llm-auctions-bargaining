@@ -70,6 +70,18 @@ python -m experiments.escrow_market.runner --provider codex --models gpt-5.4,gpt
 
 Outputs for the escrow benchmark land in `runs_escrow_market/escrow_market_results.jsonl`.
 
+Certification-slot market smoke run with Codex (`gpt-5.4` and `gpt-5.2`, 1 seed, both prompt arms):
+```
+python -m experiments.certification_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 4 --rounds 4 --deadline-round 4 --certification-capacity 2 --shipping-capacity 2 --codex-timeout 600
+```
+
+Certification-slot market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
+```
+python -m experiments.certification_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --firms 4 --rounds 4 --deadline-round 4 --certification-capacity 2 --shipping-capacity 2 --codex-timeout 600
+```
+
+Outputs for the certification-slot benchmark land in `runs_certification_market/certification_market_results.jsonl`.
+
 ## Conditions (prioritized for institutional robustness)
 - Vickrey: `collusion_channel` (one public message before bids), `memory_anchor` (3 repeated auctions with price history), `rule_challenge` (bidders can contest rules, explanations required), `explanation_coord` (messages + required rationale).
 - Shapley: `dm_late_reveal` (private DMs allowed; mediator reveals reference split after round 1), `broadcast_never_reveal` (broadcast-only; no reference), `dm_never_reveal_adversarial` (private DMs; one contrarian player; no reference).

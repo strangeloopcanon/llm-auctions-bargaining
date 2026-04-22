@@ -42,6 +42,14 @@ def _brokered_label(model: str, arm: str) -> str:
     return f"{model}\n{arm_label}"
 
 
+def _certification_label(model: str, arm: str) -> str:
+    arm_label = {
+        "baseline": "baseline",
+        "completion_explicit": "explicit",
+    }.get(arm, arm)
+    return f"{model}\n{arm_label}"
+
+
 def plot_ip_welfare_by_regime() -> None:
     base = Path("runs_ip_market")
     if not base.exists():
@@ -212,6 +220,19 @@ def _load_ip_brokered_rows() -> list[dict]:
 
 def _load_escrow_rows() -> list[dict]:
     path = Path("runs_escrow_market/escrow_market_results.jsonl")
+    if not path.exists():
+        return []
+
+    rows = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if not raw_line.strip():
+            continue
+        rows.append(json.loads(raw_line))
+    return rows
+
+
+def _load_certification_rows() -> list[dict]:
+    path = Path("runs_certification_market/certification_market_results.jsonl")
     if not path.exists():
         return []
 
@@ -397,8 +418,68 @@ def plot_escrow_institution_activation_rate_by_arm_and_model() -> None:
     plt.close()
 
 
+def plot_certification_fulfillment_rate_by_arm_and_model() -> None:
+    rows = _load_certification_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("fulfillment_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (model, arm), samples in sorted(grouped.items()):
+        labels.append(_certification_label(model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Fulfillment rate")
+    plt.ylim(0, 1)
+    plt.title("Certification-slot market fulfillment rate by arm and model")
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "certification_market_fulfillment_rate_by_arm_model.png", dpi=200)
+    plt.close()
+
+
+def plot_certification_schedule_activation_rate_by_arm_and_model() -> None:
+    rows = _load_certification_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("shipping_schedule_activation_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (model, arm), samples in sorted(grouped.items()):
+        labels.append(_certification_label(model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Shipping-rule activation rate")
+    plt.ylim(0, 1)
+    plt.title("Certification-slot market shipping-rule activation rate by arm and model")
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "certification_market_schedule_activation_rate_by_arm_model.png", dpi=200)
+    plt.close()
+
+
 def main() -> None:
     ensure_dir()
+    plot_certification_fulfillment_rate_by_arm_and_model()
+    plot_certification_schedule_activation_rate_by_arm_and_model()
     plot_escrow_fulfillment_rate_by_arm_and_model()
     plot_escrow_institution_activation_rate_by_arm_and_model()
     plot_ip_welfare_by_regime()
