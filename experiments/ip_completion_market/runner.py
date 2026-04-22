@@ -40,6 +40,12 @@ def parse_args() -> argparse.Namespace:
         help="Comma-separated prompt arms.",
     )
     parser.add_argument(
+        "--scenarios",
+        type=str,
+        default="partner_directory,opaque_directory",
+        help="Comma-separated information regimes.",
+    )
+    parser.add_argument(
         "--append",
         action="store_true",
         help="Append to an existing results file instead of overwriting it.",
@@ -55,6 +61,7 @@ def main() -> None:
     args = parse_args()
     models = _split_csv(args.models)
     arms = _split_csv(args.arms)
+    scenarios = _split_csv(args.scenarios)
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     output_path = out_dir / "ip_completion_market_results.jsonl"
@@ -74,44 +81,46 @@ def main() -> None:
             n_orders=args.orders,
             seed=seed,
         )
-        for model in models:
-            for arm in arms:
-                firms = generate_firms(args.firms, arm=arm)
-                model_settings = ModelSettings(
-                    provider=args.provider,
-                    model=model,
-                    temperature=args.temperature,
-                    codex_home=args.codex_home,
-                    codex_reasoning_effort=args.codex_reasoning_effort,
-                    codex_timeout_seconds=args.codex_timeout,
-                )
-                result = run_completion_market(
-                    model_settings=model_settings,
-                    firms=firms,
-                    modules=modules,
-                    orders=orders,
-                    dry_run=args.dry_run,
-                    rounds=args.rounds,
-                    seed=seed,
-                )
-                row = {
-                    "seed": seed,
-                    "arm": arm,
-                    "provider": args.provider,
-                    "model": model,
-                    "summary": result["summary"],
-                    "round_logs": result["round_logs"],
-                    "orders": result["orders"],
-                    "modules": result["modules"],
-                }
-                rows.append(row)
-                print(
-                    f"Completed IP completion market seed={seed} arm={arm} model={model} "
-                    f"(dry_run={args.dry_run})",
-                    flush=True,
-                )
-
-    write_jsonl(output_path, rows)
+        for scenario in scenarios:
+            for model in models:
+                for arm in arms:
+                    firms = generate_firms(args.firms, arm=arm)
+                    model_settings = ModelSettings(
+                        provider=args.provider,
+                        model=model,
+                        temperature=args.temperature,
+                        codex_home=args.codex_home,
+                        codex_reasoning_effort=args.codex_reasoning_effort,
+                        codex_timeout_seconds=args.codex_timeout,
+                    )
+                    result = run_completion_market(
+                        model_settings=model_settings,
+                        firms=firms,
+                        modules=modules,
+                        orders=orders,
+                        dry_run=args.dry_run,
+                        rounds=args.rounds,
+                        seed=seed,
+                        scenario=scenario,
+                    )
+                    row = {
+                        "seed": seed,
+                        "scenario": scenario,
+                        "arm": arm,
+                        "provider": args.provider,
+                        "model": model,
+                        "summary": result["summary"],
+                        "round_logs": result["round_logs"],
+                        "orders": result["orders"],
+                        "modules": result["modules"],
+                    }
+                    rows.append(row)
+                    write_jsonl(output_path, rows)
+                    print(
+                        f"Completed IP completion market seed={seed} scenario={scenario} "
+                        f"arm={arm} model={model} (dry_run={args.dry_run})",
+                        flush=True,
+                    )
 
 
 if __name__ == "__main__":

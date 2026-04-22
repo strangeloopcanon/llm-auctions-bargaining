@@ -165,8 +165,8 @@ def generate_modules_and_orders(
             order_id=f"O{index + 1}",
             target_firm=target_firm,
             customer_brief=(
-                f"A {customer_type} will pay {delivery_value:.2f} if your firm delivers a package "
-                f"that combines {modules_by_capability[required_capabilities[0]].order_phrase}, "
+                f"A {customer_type} will pay {delivery_value:.2f} if your firm can deliver one "
+                f"client-ready package that covers {modules_by_capability[required_capabilities[0]].order_phrase}, "
                 f"{modules_by_capability[required_capabilities[1]].order_phrase}, and "
                 f"{modules_by_capability[required_capabilities[2]].order_phrase} by the deadline."
             ),

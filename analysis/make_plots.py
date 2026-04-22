@@ -22,6 +22,18 @@ def ensure_dir() -> None:
     PLOTS_DIR.mkdir(exist_ok=True)
 
 
+def _completion_label(scenario: str, model: str, arm: str) -> str:
+    scenario_label = {
+        "partner_directory": "partner",
+        "opaque_directory": "opaque",
+    }.get(scenario, scenario)
+    arm_label = {
+        "baseline": "baseline",
+        "completion_explicit": "explicit",
+    }.get(arm, arm)
+    return f"{scenario_label}\n{model}\n{arm_label}"
+
+
 def plot_ip_welfare_by_regime() -> None:
     base = Path("runs_ip_market")
     if not base.exists():
@@ -164,39 +176,74 @@ def plot_shapley_l1_by_condition() -> None:
     plt.close()
 
 
-def plot_ip_completion_fulfillment_rate_by_arm_and_model() -> None:
+def _load_ip_completion_rows() -> list[dict]:
     path = Path("runs_ip_completion_market/ip_completion_market_results.jsonl")
     if not path.exists():
-        return
+        return []
 
     rows = []
     for raw_line in path.read_text(encoding="utf-8").splitlines():
         if not raw_line.strip():
             continue
         rows.append(json.loads(raw_line))
+    return rows
+
+
+def plot_ip_completion_fulfillment_rate_by_scenario_arm_and_model() -> None:
+    rows = _load_ip_completion_rows()
     if not rows:
         return
 
     grouped = defaultdict(list)
     for row in rows:
         summary = row.get("summary", {})
-        grouped[(row.get("model", ""), row.get("arm", ""))].append(
+        grouped[(row.get("scenario", ""), row.get("model", ""), row.get("arm", ""))].append(
             float(summary.get("fulfillment_rate", 0.0))
         )
 
     labels = []
     values = []
-    for (model, arm), samples in sorted(grouped.items()):
-        labels.append(f"{model}\n{arm}")
+    for (scenario, model, arm), samples in sorted(grouped.items()):
+        labels.append(_completion_label(scenario, model, arm))
         values.append(sum(samples) / len(samples))
 
-    plt.figure(figsize=(7, 4))
+    plt.figure(figsize=(10.5, 4.5))
     plt.bar(labels, values)
     plt.ylabel("Fulfillment rate")
     plt.ylim(0, 1)
-    plt.title("IP completion market fulfillment rate by arm and model")
+    plt.title("IP completion market fulfillment rate by scenario, arm, and model")
+    plt.xticks(rotation=20, ha="right")
     plt.tight_layout()
-    plt.savefig(PLOTS_DIR / "ip_completion_fulfillment_rate_by_arm_and_model.png", dpi=200)
+    plt.savefig(PLOTS_DIR / "ip_completion_fulfillment_rate_by_scenario_arm_model.png", dpi=200)
+    plt.close()
+
+
+def plot_ip_completion_partner_request_rate_by_scenario_arm_and_model() -> None:
+    rows = _load_ip_completion_rows()
+    if not rows:
+        return
+
+    grouped = defaultdict(list)
+    for row in rows:
+        summary = row.get("summary", {})
+        grouped[(row.get("scenario", ""), row.get("model", ""), row.get("arm", ""))].append(
+            float(summary.get("partner_request_rate", 0.0))
+        )
+
+    labels = []
+    values = []
+    for (scenario, model, arm), samples in sorted(grouped.items()):
+        labels.append(_completion_label(scenario, model, arm))
+        values.append(sum(samples) / len(samples))
+
+    plt.figure(figsize=(10.5, 4.5))
+    plt.bar(labels, values)
+    plt.ylabel("Partner request rate")
+    plt.ylim(0, 1)
+    plt.title("IP completion market partner request rate by scenario, arm, and model")
+    plt.xticks(rotation=20, ha="right")
+    plt.tight_layout()
+    plt.savefig(PLOTS_DIR / "ip_completion_partner_request_rate_by_scenario_arm_model.png", dpi=200)
     plt.close()
 
 
@@ -204,7 +251,8 @@ def main() -> None:
     ensure_dir()
     plot_ip_welfare_by_regime()
     plot_ip_adversarial_profit_seed980()
-    plot_ip_completion_fulfillment_rate_by_arm_and_model()
+    plot_ip_completion_fulfillment_rate_by_scenario_arm_and_model()
+    plot_ip_completion_partner_request_rate_by_scenario_arm_and_model()
     plot_internal_budgets_seed950()
     plot_shapley_l1_by_condition()
 
