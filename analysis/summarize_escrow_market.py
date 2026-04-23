@@ -14,7 +14,9 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 
 
-RESULTS_PATH = Path("runs_escrow_market/escrow_market_results.jsonl")
+RESULTS_PATH = Path(
+    "initiative_benchmarks/escrow_inspection/runs/authoritative/escrow_market_results.jsonl"
+)
 
 
 def parse_args() -> argparse.Namespace:

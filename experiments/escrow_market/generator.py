@@ -3,12 +3,95 @@ from __future__ import annotations
 import random
 from typing import List, Tuple
 
-from ..ip_completion_market.generator import CAPABILITY_TEMPLATES, CUSTOMER_TYPES
 from .models import CustomerOrder, Firm, InventoryLot
 from .prompts import firm_prompt
 
 
 DEFAULT_DEADLINE_ROUND = 3
+
+CAPABILITY_TEMPLATES = [
+    {
+        "capability": "remote telemetry stack",
+        "module_name": "Orbit telemetry stack",
+        "description": "Telemetry layer for remote fleet monitoring and alert routing.",
+        "order_phrase": "remote telemetry and fleet monitoring",
+    },
+    {
+        "capability": "device control firmware",
+        "module_name": "Helix control firmware",
+        "description": "Safety-critical control firmware for connected industrial devices.",
+        "order_phrase": "reliable device control firmware",
+    },
+    {
+        "capability": "compliance submission pack",
+        "module_name": "RegShield submission pack",
+        "description": "Documentation, testing records, and compliance packaging for regulated launches.",
+        "order_phrase": "a submission-ready compliance package",
+    },
+    {
+        "capability": "predictive maintenance analytics",
+        "module_name": "Pulse maintenance analytics",
+        "description": "Analytics engine for predictive maintenance and failure forecasting.",
+        "order_phrase": "predictive maintenance analytics",
+    },
+    {
+        "capability": "workflow automation layer",
+        "module_name": "FlowForge automation layer",
+        "description": "Workflow orchestration layer that routes approvals and exceptions.",
+        "order_phrase": "workflow automation for exception handling",
+    },
+    {
+        "capability": "security hardening bundle",
+        "module_name": "VaultLine security bundle",
+        "description": "Authentication, audit, and secure update components for enterprise deployments.",
+        "order_phrase": "enterprise security hardening",
+    },
+    {
+        "capability": "inventory synchronization service",
+        "module_name": "StockBridge sync service",
+        "description": "Inventory synchronization service across warehouses and distributors.",
+        "order_phrase": "inventory synchronization across sites",
+    },
+    {
+        "capability": "supplier pricing engine",
+        "module_name": "DealMap pricing engine",
+        "description": "Dynamic supplier pricing engine for procurement and quotation workflows.",
+        "order_phrase": "supplier pricing and quotation support",
+    },
+    {
+        "capability": "quality assurance toolkit",
+        "module_name": "AssureKit QA toolkit",
+        "description": "Quality assurance toolkit for validation, error tracing, and release sign-off.",
+        "order_phrase": "quality assurance sign-off",
+    },
+    {
+        "capability": "customer onboarding suite",
+        "module_name": "LaunchPad onboarding suite",
+        "description": "Customer onboarding workflow with provisioning and success tracking.",
+        "order_phrase": "customer onboarding and provisioning",
+    },
+    {
+        "capability": "field service scheduler",
+        "module_name": "RoutePilot service scheduler",
+        "description": "Field service scheduler for dispatching technicians and managing SLAs.",
+        "order_phrase": "field service scheduling",
+    },
+    {
+        "capability": "payment settlement adapter",
+        "module_name": "LedgerLink settlement adapter",
+        "description": "Payment settlement and reconciliation adapter for enterprise billing.",
+        "order_phrase": "payment settlement and reconciliation",
+    },
+]
+
+CUSTOMER_TYPES = [
+    "regional hospital network",
+    "national logistics operator",
+    "multisite retailer",
+    "industrial equipment distributor",
+    "regulated device manufacturer",
+    "enterprise software reseller",
+]
 
 
 def generate_firms(n_firms: int, arm: str) -> List[Firm]:

@@ -26,7 +26,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--models", type=str, default="gpt-5.4,gpt-5.2")
     parser.add_argument("--temperature", type=float, default=0.2)
-    parser.add_argument("--output-dir", type=str, default="runs_escrow_market")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="initiative_benchmarks/escrow_inspection/runs/authoritative",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--codex-home", type=str, default=None)
     parser.add_argument("--codex-reasoning-effort", type=str, default="medium")

@@ -1,110 +1,59 @@
 # Multi-agent auction and bargaining experiments
 
-Lightweight scaffolding to probe how language agents behave in Vickrey auctions and Shapley-style bargaining when they can talk, remember, and contest rules. Focus: cumulative effects of multiple agents coordinating or competing.
+This repo keeps the runnable auction, bargaining, internal-market, zoning, escrow, and standards experiment code. The only saved initiative benchmark artifacts we still keep are the authoritative escrow and standards outputs.
 
 ## Install
-Requires Python 3.11+. Install deps:
-```
+Requires Python 3.11+.
+
+```bash
 pip install -e .
 ```
-Set `OPENAI_API_KEY` (and `OPENAI_BASE_URL` if using a gateway). Default model: `gpt-5.1`.
-To use Gemini, set `GEMINI_API_KEY` or `GOOGLE_API_KEY` and run with `--provider gemini --model <gemini-model>`.
 
-## Run
-Dry run (no model calls):
-```
+Set `OPENAI_API_KEY` and `OPENAI_BASE_URL` if needed. To use Gemini, set `GEMINI_API_KEY` or `GOOGLE_API_KEY` and pass `--provider gemini --model <gemini-model>`.
+
+## Core runs
+Dry run:
+
+```bash
 python -m experiments.runner --mode vickrey --condition all --seeds 1 --dry-run
 ```
 
-Live run example (Vickrey, collusion arm, 3 seeds):
-```
+Vickrey example:
+
+```bash
 python -m experiments.runner --mode vickrey --condition collusion_channel --seeds 3
 ```
 
-Live run with Gemini:
-```
-python -m experiments.runner --mode vickrey --condition collusion_channel --seeds 1 --provider gemini --model gemini-1.5-pro
-```
+Shapley example:
 
-Shapley bargaining with private DMs and late reveal of the reference split:
-```
+```bash
 python -m experiments.runner --mode shapley --condition dm_late_reveal --seeds 2
 ```
 
-Outputs land in `runs/` as JSONL logs per seed/condition plus a small summary JSONL.
-For all experiments (including internal markets and IP licensing), see `RUNS_OVERVIEW.md` for a consolidated run log and analysis.
+These runs write fresh output to runner-specific directories when you execute them.
 
-IP completion market smoke run with Codex (`gpt-5.4`, 1 seed, both prompt arms, neutral directory):
-```
-python -m experiments.ip_completion_market.runner --provider codex --models gpt-5.4 --seeds 1 --firms 4 --modules 4 --orders 2 --rounds 1 --scenarios partner_directory --codex-timeout 300
-```
+## Kept benchmark surfaces
+Escrow benchmark code lives in `experiments/escrow_market/`. The kept saved output and plots are:
 
-IP completion market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms, both information regimes):
-```
-python -m experiments.ip_completion_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --scenarios partner_directory,opaque_directory --codex-timeout 300
-```
+- `initiative_benchmarks/escrow_inspection/runs/authoritative/escrow_market_results.jsonl`
+- `initiative_benchmarks/escrow_inspection/plots/escrow_market_fulfillment_rate_by_arm_model.png`
+- `initiative_benchmarks/escrow_inspection/plots/escrow_market_institution_activation_rate_by_arm_model.png`
 
-Outputs for the customer-order initiative experiment land in `runs_ip_completion_market/ip_completion_market_results.jsonl` and include the information-regime `scenario` for each run.
+Standards benchmark code lives in `experiments/standards_market/`. The kept saved output and note are:
 
-Brokered IP market smoke run with Codex (`gpt-5.4` and `gpt-5.2`, 1 seed, both prompt arms):
-```
-python -m experiments.ip_brokered_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 4 --modules 4 --orders 2 --rounds 3 --codex-timeout 600
-```
+- `initiative_benchmarks/standards_market/runs/authoritative/standards_market_results.jsonl`
+- `initiative_benchmarks/standards_market/notes/autarkic_localism.md`
+- `initiative_benchmarks/standards_market/plots/autarkic_localism_summary.svg`
 
-Brokered IP market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
-```
-python -m experiments.ip_brokered_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --rounds 3 --codex-timeout 600
+## Re-run kept benchmarks
+Escrow smoke run to a temporary folder outside the repo:
+
+```bash
+python -m experiments.escrow_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 6 --rounds 3 --codex-timeout 600 --output-dir /tmp/llm-auctions-bargaining-escrow-smoke
 ```
 
-Outputs for the brokered board benchmark land in `runs_ip_brokered_market/ip_brokered_market_results.jsonl`.
+Standards smoke run to a temporary folder outside the repo:
 
-Escrow market smoke run with Codex (`gpt-5.4` and `gpt-5.2`, 1 seed, both prompt arms):
+```bash
+python -m experiments.standards_market.runner --provider codex --models gpt-5.4 --seeds 1 --firms 4 --rounds 3 --deadline-round 3 --codex-timeout 600 --output-dir /tmp/llm-auctions-bargaining-standards-smoke
 ```
-python -m experiments.escrow_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 6 --rounds 3 --codex-timeout 600
-```
-
-Escrow market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
-```
-python -m experiments.escrow_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --rounds 3 --codex-timeout 600
-```
-
-Outputs for the escrow benchmark land in `runs_escrow_market/escrow_market_results.jsonl`.
-
-Certification-slot market smoke run with Codex (`gpt-5.4` and `gpt-5.2`, 1 seed, both prompt arms):
-```
-python -m experiments.certification_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 1 --firms 4 --rounds 4 --deadline-round 4 --certification-capacity 2 --shipping-capacity 2 --codex-timeout 600
-```
-
-Certification-slot market first matrix (`gpt-5.4` and `gpt-5.2`, 2 seeds, both prompt arms):
-```
-python -m experiments.certification_market.runner --provider codex --models gpt-5.4,gpt-5.2 --seeds 2 --firms 4 --rounds 4 --deadline-round 4 --certification-capacity 2 --shipping-capacity 2 --codex-timeout 600
-```
-
-Outputs for the certification-slot benchmark land in `runs_certification_market/certification_market_results.jsonl`.
-
-Standards market smoke run with Codex (`gpt-5.4`, 1 seed, both prompt arms):
-```
-python -m experiments.standards_market.runner --provider codex --models gpt-5.4 --seeds 1 --firms 4 --rounds 3 --deadline-round 3 --codex-timeout 600
-```
-
-Outputs for the standards benchmark land in `runs_standards_market/standards_market_results.jsonl`.
-
-## Conditions (prioritized for institutional robustness)
-- Vickrey: `collusion_channel` (one public message before bids), `memory_anchor` (3 repeated auctions with price history), `rule_challenge` (bidders can contest rules, explanations required), `explanation_coord` (messages + required rationale).
-- Shapley: `dm_late_reveal` (private DMs allowed; mediator reveals reference split after round 1), `broadcast_never_reveal` (broadcast-only; no reference), `dm_never_reveal_adversarial` (private DMs; one contrarian player; no reference).
-
-## Design notes
-- Agents are given distinct personas (profit, fairness, compliance, cooperative, occasional contrarian). No heterogeneous model capabilities; all use GPT-5.1.
-- Personas now include detailed 500+ word backgrounds covering objectives, risk attitudes, norms, and communication style to produce realistic four-years-out agent behavior.
-- Vickrey side-channel messages provide a minimal coordination surface; memory arm tests anchoring across repeated auctions; rule-challenge arm logs attempts to renegotiate the mechanism.
-- Shapley negotiation models coalition formation: optional private DMs, optional late release of a reference (Shapley-style) allocation, and an adversarial player variant to stress mediator robustness.
-- All prompts force JSON output. Logs capture bids/proposals, messages, rule challenges, allocations, and distances to the reference split.
-
-## Interpreting results
-- Vickrey: watch bid compression under collusion, anchoring drift across rounds, and frequency/content of rule challenges; track allocative efficiency and revenue changes.
-- Shapley: compare distance to the reference split with/without DMs and reference reveal; inspect coalition messages and whether agreements converge when the reference is withheld. Adversarial runs test whether a single actor derails convergence.
-
-## Initial findings (early runs)
-- Representative summaries and transcripts live in `runs/`. `RUNS_OVERVIEW.md` is the canonical log of all runs and results.
-- Vickrey (early seeds 42–44): allocative efficiency held; side-channel messages reinforced truthful bidding; no rule challenges; overbids were only rounding effects; memory arm showed no drift.
-- Shapley (early seeds 42–44): private DMs enabled coalition talk (e.g., p4/p5 coordinating premiums) and nudged allocations toward the reference, but most outcomes stayed materially off the Shapley-style split; broadcast-only often fell back to near-equal splits; no deadlocks or rule attacks observed.
