@@ -1,6 +1,6 @@
-# Standards Market: Autarkic Localism Pilot
+# Standards Market: Autarkic Localism Note
 
-This note summarizes the saved pilot where firms could make real local progress, talk about coordination, and still fail to converge on a shared standard.
+This note summarizes the kept standards benchmark where firms could make real local progress, talk about coordination, and still fail to converge on a shared standard.
 
 Source: `initiative_benchmarks/standards_market/runs/authoritative/standards_market_results.jsonl`
 Chart: `initiative_benchmarks/standards_market/plots/autarkic_localism_summary.svg`
@@ -15,7 +15,7 @@ Each firm can send short public memos and start its own build. The local build p
 
 ## Headline
 
-In the saved `gpt-5.4` pilot, both prompt arms completed every local module build, both arms sent many coordination memos, and both arms still failed final delivery in every seed.
+In the kept `gpt-5.4` runs, both prompt arms completed every local module build, both arms sent many coordination memos, and both arms still failed final delivery in every seed.
 
 ## Aggregate
 
@@ -35,4 +35,4 @@ In the saved `gpt-5.4` pilot, both prompt arms completed every local module buil
 
 ## Read
 
-This is the cleanest saved example so far of autarkic localism: each firm keeps moving on its own local track, partial progress accumulates, and the shared job still does not finish.
+This is the cleanest kept example so far of autarkic localism: each firm keeps moving on its own local track, partial progress accumulates, and the shared job still does not finish.
