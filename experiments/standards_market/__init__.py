@@ -1,0 +1,1 @@
+"""Shared-standard initiative benchmark."""

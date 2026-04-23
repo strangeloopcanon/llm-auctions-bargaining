@@ -1,5 +1,5 @@
 import random
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
 
 def generate_world(n_homeowners: int, seed: int) -> Tuple[float, float, List[float]]:

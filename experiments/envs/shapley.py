@@ -146,7 +146,6 @@ def run_shapley_condition(
     dry_run: bool = False,
     persona_variant: str = "default",
 ) -> Dict:
-    rng = __import__("random").Random(seed)
     client = None
     if not dry_run and model_settings.provider == "openai":
         client = openai_client_from_settings(model_settings)

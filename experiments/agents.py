@@ -4,10 +4,11 @@ import random
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from openai import OpenAI
 
+from .codex_exec import run_codex_json
 from .settings import ModelSettings
 
 
@@ -107,16 +108,30 @@ def adapt_persona_for_provider(persona: AgentPersona, provider: str) -> AgentPer
 
 
 def call_agent_json(
-    client: OpenAI,
+    client: Optional[OpenAI],
     model_settings: ModelSettings,
     system_prompt: str,
     user_prompt: str,
     response_schema: Optional[Dict] = None,
     dry_run: bool = False,
+    metadata_sink: Optional[Dict[str, Any]] = None,
 ) -> Tuple[Dict, str]:
     if dry_run:
+        if metadata_sink is not None:
+            metadata_sink.update({"provider": model_settings.provider, "usage": None})
         return {}, '{"stub": true}'
-    if model_settings.provider == "gemini":
+    usage = None
+    if model_settings.provider == "codex":
+        data, text, usage = run_codex_json(
+            prompt=_build_codex_prompt(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                response_schema=response_schema,
+            ),
+            model_settings=model_settings,
+            response_schema=response_schema,
+        )
+    elif model_settings.provider == "gemini":
         data, text = _call_gemini_json(
             model_settings=model_settings,
             system_prompt=system_prompt,
@@ -124,13 +139,48 @@ def call_agent_json(
             response_schema=response_schema,
         )
     else:
+        if client is None:
+            client = openai_client_from_settings(model_settings)
         data, text = _call_openai_json(
             client=client,
             model_settings=model_settings,
             system_prompt=system_prompt,
             user_prompt=user_prompt,
         )
+    if metadata_sink is not None:
+        metadata_sink.update({"provider": model_settings.provider, "usage": usage})
     return data, text
+
+
+def _build_codex_prompt(
+    *,
+    system_prompt: str,
+    user_prompt: str,
+    response_schema: Optional[Dict[str, Any]],
+) -> str:
+    lines = [
+        "You are producing one decision for a structured market simulation.",
+        "Return exactly one JSON object and nothing else.",
+        "",
+        "System instructions:",
+        system_prompt.strip(),
+        "",
+        "User state:",
+        user_prompt.strip(),
+    ]
+    if isinstance(response_schema, dict):
+        properties = response_schema.get("properties")
+        if isinstance(properties, dict) and properties:
+            lines.extend(["", "Required top-level JSON fields:"])
+            for key, value in properties.items():
+                schema_type = ""
+                if isinstance(value, dict):
+                    schema_type = str(value.get("type") or "").strip().lower()
+                if schema_type:
+                    lines.append(f'- "{key}": {schema_type}')
+                else:
+                    lines.append(f'- "{key}"')
+    return "\n".join(lines).strip() + "\n"
 
 
 def openai_client_from_settings(settings: ModelSettings) -> OpenAI:

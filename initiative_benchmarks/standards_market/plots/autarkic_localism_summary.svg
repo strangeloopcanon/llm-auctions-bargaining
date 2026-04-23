@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="540" viewBox="0 0 900 540">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450" y="34" text-anchor="middle" font-size="24" font-family="Helvetica, Arial, sans-serif">Standards market: local progress, no collective closure</text>
+<line x1="90" y1="420.0" x2="860" y2="420.0" stroke="#dddddd" stroke-width="1"/>
+<text x="78" y="425.0" text-anchor="end" font-size="12" font-family="Helvetica, Arial, sans-serif">0.0</text>
+<line x1="90" y1="350.0" x2="860" y2="350.0" stroke="#dddddd" stroke-width="1"/>
+<text x="78" y="355.0" text-anchor="end" font-size="12" font-family="Helvetica, Arial, sans-serif">0.2</text>
+<line x1="90" y1="280.0" x2="860" y2="280.0" stroke="#dddddd" stroke-width="1"/>
+<text x="78" y="285.0" text-anchor="end" font-size="12" font-family="Helvetica, Arial, sans-serif">0.4</text>
+<line x1="90" y1="210.0" x2="860" y2="210.0" stroke="#dddddd" stroke-width="1"/>
+<text x="78" y="215.0" text-anchor="end" font-size="12" font-family="Helvetica, Arial, sans-serif">0.6</text>
+<line x1="90" y1="140.0" x2="860" y2="140.0" stroke="#dddddd" stroke-width="1"/>
+<text x="78" y="145.0" text-anchor="end" font-size="12" font-family="Helvetica, Arial, sans-serif">0.8</text>
+<line x1="90" y1="70.0" x2="860" y2="70.0" stroke="#dddddd" stroke-width="1"/>
+<text x="78" y="75.0" text-anchor="end" font-size="12" font-family="Helvetica, Arial, sans-serif">1.0</text>
+<line x1="90" y1="70" x2="90" y2="420" stroke="#333333" stroke-width="1.5"/>
+<line x1="90" y1="420" x2="860" y2="420" stroke="#333333" stroke-width="1.5"/>
+<text x="26" y="245.0" text-anchor="middle" font-size="14" font-family="Helvetica, Arial, sans-serif" transform="rotate(-90 26 245.0)">Rate</text>
+<rect x="610" y="46" width="14" height="14" fill="#d17b0f"/>
+<text x="632" y="57" font-size="13" font-family="Helvetica, Arial, sans-serif">Module completion</text>
+<rect x="610" y="70" width="14" height="14" fill="#4c78a8"/>
+<text x="632" y="81" font-size="13" font-family="Helvetica, Arial, sans-serif">Format convergence</text>
+<rect x="610" y="94" width="14" height="14" fill="#2f9e44"/>
+<text x="632" y="105" font-size="13" font-family="Helvetica, Arial, sans-serif">Final delivery</text>
+<rect x="278.0" y="70.0" width="38" height="350.0" fill="#d17b0f"/>
+<text x="297.0" y="62.0" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif">1.00</text>
+<rect x="324.0" y="245.0" width="38" height="175.0" fill="#4c78a8"/>
+<text x="343.0" y="237.0" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif">0.50</text>
+<rect x="370.0" y="420.0" width="38" height="0.0" fill="#2f9e44"/>
+<text x="389.0" y="412.0" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif">0.00</text>
+<text x="359.0" y="468" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif">gpt-5.4 baseline</text>
+<rect x="510.0" y="70.0" width="38" height="350.0" fill="#d17b0f"/>
+<text x="529.0" y="62.0" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif">1.00</text>
+<rect x="556.0" y="245.0" width="38" height="175.0" fill="#4c78a8"/>
+<text x="575.0" y="237.0" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif">0.50</text>
+<rect x="602.0" y="420.0" width="38" height="0.0" fill="#2f9e44"/>
+<text x="621.0" y="412.0" text-anchor="middle" font-size="12" font-family="Helvetica, Arial, sans-serif">0.00</text>
+<text x="591.0" y="468" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif">gpt-5.4 explicit</text>
+</svg>
